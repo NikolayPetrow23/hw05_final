@@ -30,16 +30,18 @@ def group_posts(request, slug):
     return render(request, 'posts/group_list.html', context)
 
 
-@login_required
 def profile(request, username):
     """Персональная страница пользователя Yatube."""
     author = get_object_or_404(User, username=username)
     posts_list = author.posts.all()
     page_obj = paginator_view(request, posts_list)
 
-    following = Follow.objects.filter(
-        user=request.user, author=author
-    ).exists()
+    if request.user.is_authenticated:
+        following = Follow.objects.filter(
+            user=request.user, author=author
+        ).exists()
+    else:
+        following = False
 
     context = {
         'author': author,
