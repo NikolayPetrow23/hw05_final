@@ -30,6 +30,7 @@ def group_posts(request, slug):
     return render(request, 'posts/group_list.html', context)
 
 
+@login_required
 def profile(request, username):
     """Персональная страница пользователя Yatube."""
     author = get_object_or_404(User, username=username)
