@@ -26,8 +26,8 @@ class PostsUrlsTests(PostsTests):
                 response = self.authorized_client.get(address)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    def test_non_existent_page_404(self):
-        """Проверка ошибки 404."""
+    def test_non_existent_page_404_and_custom_template(self):
+        """Проверка ошибки 404 и вызова кастомного шаблона ошибки."""
         response = self.authorized_client.get(con.UNEXISTING)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         self.assertTemplateUsed(response, con.TEMPLATE_404)

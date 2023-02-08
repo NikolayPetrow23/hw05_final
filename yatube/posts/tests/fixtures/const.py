@@ -44,11 +44,13 @@ TEMPLATE_POST_DETAIL = 'posts/post_detail.html'
 TEMPLATE_POST_CREATE_OR_EDIT = 'posts/create_post_or_update.html'
 
 TEMPLATE_404 = 'core/404_page_not_found.html'
+TEMPLATE_403 = 'core/403_permission_denied_view.html'
 
 # Константы адресов страниц.
 INDEX = '/'
 POST_CREATE = '/create/'
 UNEXISTING = '/unexisting_page/'
+# EXCEPTION_403 = '/exception/403/'
 
 # Константы индексов списков spacename:name, и адресов страниц.
 INDEX_NUMBER_INDEX = 0

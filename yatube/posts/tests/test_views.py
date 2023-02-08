@@ -61,7 +61,7 @@ class PostsViewsTests(PostsTests):
 
     def test_posts_index_page_show_correct_context(self):
         """Шаблон index сформирован с правильным контекстом."""
-        response = (self.guest_client.get(
+        response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_INDEX]))
         self.check_page_obj_and_posts_context_views(
             response.context['page_obj'][con.FIRST_POST]
@@ -69,7 +69,7 @@ class PostsViewsTests(PostsTests):
 
     def test_posts_group_list_page_show_correct_context(self):
         """Шаблон group_list сформирован с правильным контекстом."""
-        response = (self.guest_client.get(
+        response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_GROUP]))
         self.check_page_obj_and_posts_context_views(
             response.context['page_obj'][con.FIRST_POST]
@@ -88,7 +88,7 @@ class PostsViewsTests(PostsTests):
 
     def test_posts_post_detail_page_show_correct_context(self):
         """Шаблон post_detail сформирован с правильным контекстом."""
-        response = (self.guest_client.get(
+        response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_DETAIL]
         ))
         self.check_page_obj_and_posts_context_views(response.context['post'])
@@ -133,7 +133,7 @@ class PostsViewsTests(PostsTests):
         Проверка того, что пост не попал в группу,
         которой он не принадлежит.
         """
-        response_group = self.guest_client.get(reverse(
+        response_group = self.authorized_client.get(reverse(
             'posts:group_list', args=(self.group[con.SECOND_GROUP].slug,)
         ))
         self.assertNotEqual(
