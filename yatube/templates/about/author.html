@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Об авторе{% endblock %}
+{% block content %}
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-7 col-md-12 mx-auto">
+        <article>
+          <h2 class="fw-light">Привет, я автор <span style="color:red">Ya</span>tube</h2>
+          <img class="rounded-img col-8 col-sm-7 col-md-6 col-lg-5 col-xl-4"
+               src="{% static 'img/about/I23.JPG' %}"/>
+          <br>
+          <p class="lead text-muted">
+            Меня зовут Коля. Не так давно я закончил техникум, и понял, что не хочу работать по профессии.
+            Поэтому начал инетересоваться разными сферами, и выбор пал на IT. Самым сложным было выбрать язык програмирования,
+            а после просмотра кучи видео я решил изучать Python. Он показался мне довольно универсальным и понятным. Для того чтобы
+            спокойно учиться, я уехал к себе на родину из Санкт-Петербурга в Алтайский край, но после обучения сразу вернусь обратно.
+            В дальнейшем планирую изучать Golang, он очень перспективный и быстрый.
+          </p>
+          <a href="https://github.com/NikolayPetrow23" target="_blank"><img src="{% static 'img/about/git_hub.png' %}" width="30", height="30" /></a>
+          <a href="https://biysk.hh.ru/applicant/resumes/view?resume=a508acdfff0b8c95fb0039ed1f756956376d42" target="_blank"><img src="{% static 'img/about/hh.png' %}" width="30", height="30" /></a>
+          <a href="https://vk.com/id188084762" target="_blank"><img src="{% static 'img/about/vk.png' %}" width="30", height="30" /></a>
+        </article>
+      </div>
+    </div>
+  </div>
+{% endblock %}

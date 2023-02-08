@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}
+  {% if post %}
+    Редактировать запись
+  {% else %}
+    Новый пост
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 p-5">
+        <div class="card">
+          <div class="card-header">
+            {% if post %}
+              Редактировать запись
+            {% else %}
+              Добавить запись
+            {% endif %}
+          </div>
+          <div class="card-body">
+            {% for error in form.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ error }}
+              </div>
+            {% endfor %}
+            <form method="post" enctype="multipart/form-data" action="{% if post %}{% url 'posts:post_edit' post_id=post.pk %}{% else %}{% url 'posts:post_create' %}{% endif %}">
+              {% csrf_token %}
+              <div class="form-group row my-3 p-3">
+                <label for="id_text">
+                  <span class="required text-danger" >{{ form.text.label_tag }}</span>
+                </label>
+                {{ form.text }}
+                {% if form.help_text %}
+                  <small class="form-text text-muted">{{ form.text.help_text_tag }}</small>
+                {% endif %}
+                <small id="id_text-help" class="form-text text-muted">
+                  {% if post %}
+                    Редактирование текста
+                  {% else %}
+                    {{ form.text.help_text }}
+                  {% endif %}
+                </small>
+              </div>
+              <div class="form-group row my-3 p-3">
+                <label for="id_group">
+                  {{ form.group.label_tag }}
+                </label>
+                  <select name="group" class="form-select" id="id_group">
+                    {% for group in form.group %}
+                      <option value="">{{ group }}</option>
+                    {% endfor %}
+                  </select>
+                <small id="id_group-help" class="form-text text-muted">
+                  {% if post %}
+                    Редактирование группы
+                  {% else %}
+                    {{ form.group.help_text }}
+                  {% endif %}
+                </small>
+                {{ form.image }}
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                  {% if post %}
+                    Сохранить
+                  {% else %}
+                    Добавить
+                  {% endif %}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
