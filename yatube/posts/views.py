@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import PostForm, CommentForm
 from .models import Comment, Follow
 from .models import Post, Group, User
-from .utils import paginator_view, check_following
+from .utils import paginator_view
 
 
 def index(request):
@@ -36,8 +36,9 @@ def profile(request, username):
     posts_list = author.posts.all()
     page_obj = paginator_view(request, posts_list)
 
-    related = Follow.objects.filter(user=request.user, author=author)
-    following = check_following(related)
+    following = Follow.objects.filter(
+        user=request.user, author=author
+    ).exists()
 
     context = {
         'author': author,
