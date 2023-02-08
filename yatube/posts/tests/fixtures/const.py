@@ -50,7 +50,7 @@ TEMPLATE_403 = 'core/403_permission_denied_view.html'
 INDEX = '/'
 POST_CREATE = '/create/'
 UNEXISTING = '/unexisting_page/'
-# EXCEPTION_403 = '/exception/403/'
+EXCEPTION_403 = '/exception/403/'
 
 # Константы индексов списков spacename:name, и адресов страниц.
 INDEX_NUMBER_INDEX = 0

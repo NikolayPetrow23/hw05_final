@@ -57,7 +57,7 @@ def post_detail(request, post_id):
     context = {
         'post': post,
         'form': form,
-        'comments': comments
+        'comments': comments,
     }
     return render(request, 'posts/post_detail.html', context)
 
@@ -132,7 +132,8 @@ def profile_follow(request, username):
     """Подписка на автора."""
     author = get_object_or_404(User, username=username)
     if author != request.user:
-        Follow.objects.create(user=request.user, author=author)
+        if not Follow.objects.filter(user=request.user, author=author):
+            Follow.objects.create(user=request.user, author=author)
     return redirect('posts:profile', username=username)
 
 

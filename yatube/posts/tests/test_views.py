@@ -159,7 +159,7 @@ class PostsViewsTests(PostsTests):
 
         cache.clear()
 
-        # Проверка на то, что пост не остлася на странице,
+        # Проверка на то, что пост не осталася на странице,
         # после очищения кэша.
         response_del_post = self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_INDEX]
@@ -184,7 +184,7 @@ class PostsViewsTests(PostsTests):
         )
         self.assertEqual(Follow.objects.count(), follow_related_count)
 
-    def you_can_subscribe_to_yourself(self):
+    def test_you_can_subscribe_to_yourself(self):
         """Проверяем что нельзя подписаться на самого себя."""
         follow_related_count = Follow.objects.count()
 
@@ -193,6 +193,15 @@ class PostsViewsTests(PostsTests):
             args=(self.user.username,)))
 
         self.assertEqual(Follow.objects.count(), follow_related_count)
+
+    def test_you_can_subscribe_only_once(self):
+        """Проверяем что можно подписаться только один раз."""
+        follow_related_count = Follow.objects.count()
+        for follow in range(4):
+            self.authorized_client.get(
+                self.page_subscriptions[con.INDEX_NUMB_FOLLOW]
+            )
+        self.assertEqual(Follow.objects.count(), follow_related_count + 1)
 
     def test_shows_post_follow_index(self):
         """
