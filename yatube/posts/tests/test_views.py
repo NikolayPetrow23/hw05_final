@@ -193,12 +193,11 @@ class PostsViewsTests(PostsTests):
         """
         follow_related_count = Follow.objects.count()
 
-        # Подписка на пользователя
-        self.authorized_client.get(
-            self.page_subscriptions[con.INDEX_NUMB_FOLLOW]
+        Follow.objects.create(
+            user=self.user,
+            author=self.user_follower
         )
 
-        # Отписка от пользователя.
         self.authorized_client.get(
             self.page_subscriptions[con.INDEX_NUMB_UNFOLLOW]
         )
