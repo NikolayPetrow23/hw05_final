@@ -8,27 +8,27 @@ from ..models import Post, Follow
 
 class PostsViewsTests(PostsTests):
     """Тесты для posts.views"""
-    def check_page_obj_and_posts_context_views(self, post):
+    def check_page_obj_and_posts_context_views(self, post, expected_post):
         """Функция проверки соответствия полей поста."""
         self.assertEqual(
             post.pk,
-            self.post.pk
+            expected_post.pk
         )
         self.assertEqual(
             post.text,
-            self.post.text
+            expected_post.text
         )
         self.assertEqual(
             post.author,
-            self.post.author
+            expected_post.author
         )
         self.assertEqual(
             post.group,
-            self.post.group
+            expected_post.group
         )
         self.assertEqual(
             post.image,
-            self.post.image
+            expected_post.image
         )
 
     def check_group_views(self, group, index_group):
@@ -64,7 +64,8 @@ class PostsViewsTests(PostsTests):
         response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_INDEX]))
         self.check_page_obj_and_posts_context_views(
-            response.context['page_obj'][con.FIRST_POST]
+            response.context['page_obj'][con.FIRST_POST],
+            self.post
         )
 
     def test_posts_group_list_page_show_correct_context(self):
@@ -72,7 +73,8 @@ class PostsViewsTests(PostsTests):
         response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_GROUP]))
         self.check_page_obj_and_posts_context_views(
-            response.context['page_obj'][con.FIRST_POST]
+            response.context['page_obj'][con.FIRST_POST],
+            self.post
         )
         self.check_group_views(response.context['group'], con.FIRST_GROUP)
 
@@ -82,7 +84,8 @@ class PostsViewsTests(PostsTests):
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_PROFILE])
         )
         self.check_page_obj_and_posts_context_views(
-            response.context['page_obj'][con.FIRST_POST]
+            response.context['page_obj'][con.FIRST_POST],
+            self.post
         )
         self.assertEqual(response.context['author'], self.user)
 
@@ -91,7 +94,10 @@ class PostsViewsTests(PostsTests):
         response = (self.authorized_client.get(
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_DETAIL]
         ))
-        self.check_page_obj_and_posts_context_views(response.context['post'])
+        self.check_page_obj_and_posts_context_views(
+            response.context['post'],
+            self.post
+        )
 
     def test_posts_post_create_page_show_correct_context(self):
         """Шаблон post_create сформирован с правильным контекстом."""
@@ -106,7 +112,8 @@ class PostsViewsTests(PostsTests):
             self.pages_space_name_and_name[con.INDEX_NUMBER_POST_EDIT]
         ))
         self.check_page_obj_and_posts_context_views(
-            response.context['post']
+            response.context['post'],
+            self.post
         )
         self.assertIsInstance(response.context['form'], self.form_views)
 
@@ -167,10 +174,10 @@ class PostsViewsTests(PostsTests):
         post_del_post = response_del_post.content
         self.assertNotEqual(post_expected_cache, post_del_post)
 
-    def test_subscription_and_their_delete(self):
+    def test_subscription_author(self):
         """
         Проверяем, что авторизованный пользователь может подписываться
-        на других пользователей и удалять их из подписок.
+        на других пользователей.
         """
         follow_related_count = Follow.objects.count()
 
@@ -179,9 +186,23 @@ class PostsViewsTests(PostsTests):
         )
         self.assertEqual(Follow.objects.count(), follow_related_count + 1)
 
+    def test_author_unsubscribes(self):
+        """
+        Проверяем, что авторизованный пользователь может отписываться
+        от других пользователей.
+        """
+        follow_related_count = Follow.objects.count()
+
+        # Подписка на пользователя
+        self.authorized_client.get(
+            self.page_subscriptions[con.INDEX_NUMB_FOLLOW]
+        )
+
+        # Отписка от пользователя.
         self.authorized_client.get(
             self.page_subscriptions[con.INDEX_NUMB_UNFOLLOW]
         )
+
         self.assertEqual(Follow.objects.count(), follow_related_count)
 
     def test_you_can_subscribe_to_yourself(self):
@@ -209,14 +230,19 @@ class PostsViewsTests(PostsTests):
         кто на него подписан.
         """
         post = self.creation_post(self.user_follower)
-        self.authorized_client.get(
-            self.page_subscriptions[con.INDEX_NUMB_FOLLOW]
+
+        Follow.objects.create(
+            user=self.user,
+            author=self.user_follower
         )
+
         follow_index = self.authorized_client.get(
             self.page_subscriptions[con.INDEX_NUMB_POSTS_PAGE_FOLLOW]
         )
-        self.assertEqual(
-            follow_index.context['page_obj'][con.FIRST_FOLLOWING_POST], post
+
+        self.check_page_obj_and_posts_context_views(
+            follow_index.context['page_obj'][con.FIRST_FOLLOWING_POST],
+            post
         )
 
     def test_does_not_show_post_follow_index(self):

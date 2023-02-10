@@ -1,6 +1,6 @@
 from .fixtures import const as con
 from .fixtures.fixtures_data_and_user import PostsTests
-from ..models import Post
+from ..models import Post, Comment
 
 
 class PostsFormsTests(PostsTests):
@@ -61,11 +61,15 @@ class PostsFormsTests(PostsTests):
     def test_correct_add_comment_post(self):
         """
         Проверка, на корректное добавление
-        поста на страницу post_detail.
+        комментария на страницу post_detail и в БД.
         """
+        comments_count = Comment.objects.count()
+
         # Отправляем POST-запрос с заполненной формой.
         response = self.form_post_response(
-            self.pages_space_name_and_name[con.INDEX_NUMBER_POST_DETAIL],
+            self.pages_space_name_and_name[con.INDEX_NUMBER_ADD_COMMENT],
             self.form_comment
         )
+
+        self.assertEqual(Comment.objects.count(), comments_count + 1)
         self.assertContains(response, con.TEXT_COMMENT)

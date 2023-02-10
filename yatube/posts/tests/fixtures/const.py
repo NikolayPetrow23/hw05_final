@@ -59,6 +59,7 @@ INDEX_NUMBER_POST_PROFILE = 2
 INDEX_NUMBER_POST_DETAIL = 3
 INDEX_NUMBER_POST_CREATE = 4
 INDEX_NUMBER_POST_EDIT = 5
+INDEX_NUMBER_ADD_COMMENT = 6
 
 # Константы индексов списка страниц подписок, отписок
 # и страница с постами following.

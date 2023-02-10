@@ -46,7 +46,9 @@ class PostsTests(TestCase):
             'image': con.IMAGE
         }
         cls.form_comment = {
-            'text': con.TEXT_COMMENT
+            'post': cls.post.id,
+            'author': cls.user.id,
+            'text': con.TEXT_COMMENT,
         }
 
     @classmethod
@@ -96,6 +98,7 @@ class PostsTests(TestCase):
             reverse('posts:post_detail', args=(self.post.pk,)),
             reverse('posts:post_create'),
             reverse('posts:post_edit', args=(self.post.pk,)),
+            reverse('posts:add_comment', args=(self.post.pk,))
         ]
 
         # Список для проверки пагинатора и добовления поста на разные страницы.
