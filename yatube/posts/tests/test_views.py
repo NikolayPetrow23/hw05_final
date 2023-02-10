@@ -194,8 +194,8 @@ class PostsViewsTests(PostsTests):
         follow_related_count = Follow.objects.count()
 
         Follow.objects.create(
-            user=self.user_follower,
-            author=self.post.author
+            user=self.post.author,
+            author=self.user_follower
         )
 
         self.authorized_client.get(
