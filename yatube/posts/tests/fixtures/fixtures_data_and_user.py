@@ -21,7 +21,7 @@ class PostsTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username=con.USERNAME)
-        cls.user_follower = User.objects.create_user(
+        cls.user_following = User.objects.create_user(
             username=con.USERNAME_FOLLOWER
         )
 
@@ -112,9 +112,9 @@ class PostsTests(TestCase):
         # отписки и страница с постами following.
         self.page_subscriptions = [
             reverse('posts:profile_follow',
-                    args=(self.user_follower.username,)),
+                    args=(self.user_following.username,)),
             reverse('posts:profile_unfollow',
-                    args=(self.user_follower.username,)),
+                    args=(self.user_following.username,)),
             reverse('posts:follow_index'),
         ]
 
